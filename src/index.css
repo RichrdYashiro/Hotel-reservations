@@ -4,6 +4,10 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
+  width: 1140px;
+      display: flex;
+        flex-direction: column;
+        margin: 0 auto;
   -moz-osx-font-smoothing: grayscale;
 }
 
