@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const HeaderContainer = ({ className }) => (
 	<header className={className}>
 		
-			Забронируй номер
+			<Link to="/">Забронируй номер</Link>
 		<div>
             <Link to='/authorization'>Вход</Link> / <Link to='/registration'>Регистрация</Link>
         </div>
