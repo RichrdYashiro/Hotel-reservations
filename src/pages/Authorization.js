@@ -7,6 +7,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from "../components";
 import { useState } from "react";
 import { Link } from "react-router";
+import { Authorizate } from "../operation/authorizate";
+import { useDispatch } from "react-redux";
+
+import { setUser } from "../actions/Get-user";
+
+
 const authFormSchema = yup.object().shape({
 	login: yup
 		.string()
@@ -24,7 +30,8 @@ const authFormSchema = yup.object().shape({
 });
 
 const AuthorizationContainer = ({ className }) => { 
-
+    const dispatch = useDispatch();
+    const [ServerError, setServerError] = useState(null)
       const {
     register,
     handleSubmit,
@@ -36,8 +43,20 @@ const AuthorizationContainer = ({ className }) => {
 		},
 		resolver: yupResolver(authFormSchema),      
       })
-  const onSubmit = (data) => console.log(data)
-const [ServerError, setServerError] = useState(null)
+ const onSubmit = async (data) => {
+  try {
+    const user = await Authorizate(data.login, data.password);
+    if (user) {
+      dispatch(setUser(user)); 
+    } else {
+      setServerError("Неверный логин или пароль");
+    }
+  } catch (err) {
+    console.error(err);
+    setServerError("Ошибка при авторизации");
+  }
+};
+
     return (
   <div className={className}>
 			<H2>Авторизация</H2>
