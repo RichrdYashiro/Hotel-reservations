@@ -1,23 +1,42 @@
 import { Link } from 'react-router';
 import styled from 'styled-components';
-const HeaderContainer = ({ className }) => (
-	<header className={className}>
-		
+import { useSelector } from 'react-redux';
+import { selectUserLogin } from '../selectors/select-user-login';
+import { selectUserRole } from '../selectors/select-user-role';
+import { ROLE } from '../constants/role';
+
+const HeaderContainer = ({ className }) => {
+	const roleId = useSelector(selectUserRole);
+	const login = useSelector(selectUserLogin);
+	return (
+		<header className={className}>
 			<Link to="/">Забронируй номер</Link>
-		<div>
-            <Link to='/authorization'>Вход</Link> / <Link to='/registration'>Регистрация</Link>
-        </div>
-	</header>
-);
+			{roleId === ROLE.READER ? (
+				<div>
+					<Link to="/authorization">Вход</Link> /{' '}
+					<Link to="/registration">Регистрация</Link>
+				</div>
+			) : roleId === ROLE.USER ? (
+				<div>
+					Привет, {login}! <Link to="/profile">Профиль</Link>
+				</div>
+			) : roleId === ROLE.ADMIN ? (
+				<div>
+					Администратор: {login} <Link to="/adminprofile">→ В админку</Link>
+				</div>
+			) : null}
+		</header>
+	);
+};
 
 export const Header = styled(HeaderContainer)`
 	height: 60px;
-    padding: 10px 30px;
+	padding: 10px 30px;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	    border: 4px solid wheat;
-    border-radius: 20px;
+	border: 4px solid wheat;
+	border-radius: 20px;
 	top: 0;
-	    width: auto;
+	width: auto;
 `;
