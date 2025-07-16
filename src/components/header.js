@@ -1,8 +1,7 @@
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
-import { selectUserLogin } from '../selectors/select-user-login';
-import { selectUserRole } from '../selectors/select-user-role';
+import { selectUserLogin, selectUserRole } from '../selectors';
 import { ROLE } from '../constants/role';
 
 const HeaderContainer = ({ className }) => {

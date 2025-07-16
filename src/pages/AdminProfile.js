@@ -2,13 +2,12 @@ import styled from 'styled-components';
 import { H2 } from '../components';
 import { ROLE } from '../constants/role';
 import { useSelector } from 'react-redux';
-import { selectUserRole } from '../selectors/select-user-role';
 import { Link } from 'react-router';
 import { useEffect } from 'react';
 import { RoomItem } from '../components/roomItem';
 import { useDispatch } from 'react-redux';
 import { fetchRooms } from '../actions/Room-actions';
-
+import { selectUserRole } from '../selectors';
 const AdminProfileContainer = ({ className }) => {
 	const dispatch = useDispatch();
 

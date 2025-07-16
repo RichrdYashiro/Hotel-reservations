@@ -57,6 +57,9 @@
       "name": "reader"
     }
   ],
+  "booking" : [
+ 
+  ],
   "rooms": [
     {
       "id": "001",

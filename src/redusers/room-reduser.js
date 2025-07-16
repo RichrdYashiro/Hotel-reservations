@@ -10,6 +10,7 @@ export const roomReducer = (state = initialState, action) => {
 				room: action.payload,
 			};
 		}
+
 		default:
 			return state;
 	}

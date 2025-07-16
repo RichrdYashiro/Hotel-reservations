@@ -11,7 +11,7 @@ import { Authorizate } from '../operation/authorizate';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../actions/set-user';
 import { useSelector } from 'react-redux';
-import { selectUserRole } from '../selectors/select-user-role';
+import { selectUserRole } from '../selectors';
 import { ROLE } from '../constants/role';
 
 const authFormSchema = yup.object().shape({

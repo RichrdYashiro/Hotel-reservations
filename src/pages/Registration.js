@@ -12,7 +12,7 @@ import { Registrate } from '../operation/registrate';
 import { setUser } from '../actions/set-user';
 import { ROLE } from '../constants/role';
 import { useSelector } from 'react-redux';
-import { selectUserRole } from '../selectors/select-user-role';
+import { selectUserRole } from '../selectors';
 
 const regFormSchema = yup.object().shape({
 	login: yup
