@@ -1,4 +1,3 @@
-export * from './room-reduser';
-export * from './rooms-reduser';
-export * from './user-reduser';
-export * from './booking-reduser';
+export * from './booking/booking-reduser';
+export * from './room/rooms-reduser';
+export * from './user/user-reduser';

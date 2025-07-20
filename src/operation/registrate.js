@@ -1,5 +1,5 @@
-import { AddUser } from '../api/add-user';
-import { GetUser } from '../api/get-user';
+import { AddUser } from '../api';
+import { GetUser } from '../api';
 
 export const Registrate = async (regLogin, regPassword) => {
 	const existedUser = await GetUser(regLogin);

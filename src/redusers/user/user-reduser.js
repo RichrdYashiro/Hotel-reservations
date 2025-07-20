@@ -1,4 +1,4 @@
-import { ROLE } from '../constants/role';
+import { ROLE } from '../../constants/role';
 const initialUserState = {
 	login: null,
 	id: null,

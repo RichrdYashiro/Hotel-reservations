@@ -1,10 +1,11 @@
-const initialState = {
+const initialRoomsState = {
 	rooms: [],
+	room: null,
 	loading: false,
 	error: null,
 };
 
-export const roomsReducer = (state = initialState, action) => {
+export const roomsReducer = (state = initialRoomsState, action) => {
 	switch (action.type) {
 		case 'GET_ROOMS_REQUEST': {
 			return {
@@ -20,6 +21,8 @@ export const roomsReducer = (state = initialState, action) => {
 				rooms: action.payload,
 			};
 		}
+		case 'GET_ROOM_SUCCESS':
+			return { ...state, room: action.payload };
 		case 'GET_ROOMS_FAILURE': {
 			return {
 				...state,
@@ -39,6 +42,24 @@ export const roomsReducer = (state = initialState, action) => {
 				),
 			};
 		}
+		default:
+			return state;
+	}
+};
+
+const initialRoomState = {
+	room: null,
+};
+
+export const roomReducer = (state = initialRoomState, action) => {
+	switch (action.type) {
+		case 'GET_ROOM_SUCCESS': {
+			return {
+				...state,
+				room: action.payload,
+			};
+		}
+
 		default:
 			return state;
 	}
