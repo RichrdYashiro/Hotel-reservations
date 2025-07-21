@@ -10,6 +10,12 @@
       "id": "001",
       "login": "admin1",
       "password": "123456",
+      "role_id": 0
+    },
+    {
+      "id": "894c",
+      "login": "Richard12",
+      "password": "123456",
       "role_id": 1
     }
   ],
@@ -47,6 +53,31 @@
       "id": "1753107489800",
       "roomId": "003",
       "userId": "8697"
+    },
+    {
+      "id": "1753119466104",
+      "roomId": "001",
+      "userId": "894c"
+    },
+    {
+      "id": "1753119553680",
+      "roomId": "001",
+      "userId": "894c"
+    },
+    {
+      "id": "1753119573506",
+      "roomId": "002",
+      "userId": "894c"
+    },
+    {
+      "id": "1753119576285",
+      "roomId": "004",
+      "userId": "894c"
+    },
+    {
+      "id": "1753119848479",
+      "roomId": "003",
+      "userId": "8697"
     }
   ],
   "rooms": [
@@ -67,7 +98,7 @@
     {
       "id": "003",
       "title": "Номер 3",
-      "reservation": null,
+      "reservation": "8697",
       "description": "Описание к номеру",
       "img": "/rooms/img/room-demo.jpg"
     },

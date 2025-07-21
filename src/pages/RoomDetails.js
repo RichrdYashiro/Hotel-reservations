@@ -27,7 +27,12 @@ const RoomDetailsContainer = ({ className }) => {
 					<div className="roomInner">
 						<H2>Забронировать: {room.title}</H2>
 						<p>{room.description}</p>
-						{room.reservation === userId ? (
+
+						{roleId === ROLE.READER ? (
+							<Button className="noUser">
+								<Link to="/authorization">Забронировать</Link>
+							</Button>
+						) : room.reservation === userId ? (
 							<>
 								<span className="booking-status booked-by-user">
 									Вы забронировали
@@ -41,11 +46,6 @@ const RoomDetailsContainer = ({ className }) => {
 						) : (
 							<Button onClick={() => dispatch(addBooking(room.id, userId))}>
 								Забронировать
-							</Button>
-						)}
-						{roleId === ROLE.READER && (
-							<Button className="noUser">
-								<Link to="/authorization">Забронировать</Link>
 							</Button>
 						)}
 					</div>
