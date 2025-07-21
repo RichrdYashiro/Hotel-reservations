@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Button, H2 } from '../components';
 import { ROLE } from '../constants/role';
 import { selectUserId, selectUserRole } from '../selectors';
-import { addBooking } from '../actions/add-booking';
+import { addBooking, deleteBooking } from '../actions/add-booking';
 
 const RoomDetailsContainer = ({ className }) => {
 	const dispatch = useDispatch();
@@ -27,7 +27,18 @@ const RoomDetailsContainer = ({ className }) => {
 					<div className="roomInner">
 						<H2>Забронировать: {room.title}</H2>
 						<p>{room.description}</p>
-						{roleId !== ROLE.READER && (
+						{room.reservation === userId ? (
+							<>
+								<span className="booking-status booked-by-user">
+									Вы забронировали
+								</span>
+								<button onClick={() => dispatch(deleteBooking(room.id))}>
+									Отменить
+								</button>
+							</>
+						) : room.reservation ? (
+							<span className="booking-status booked">Забронирован</span>
+						) : (
 							<Button onClick={() => dispatch(addBooking(room.id, userId))}>
 								Забронировать
 							</Button>

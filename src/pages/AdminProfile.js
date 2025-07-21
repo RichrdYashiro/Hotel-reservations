@@ -51,7 +51,7 @@ export const AdminProfile = styled(AdminProfileContainer)`
 		grid-template-columns: 1fr 1fr 1fr 1fr;
 		gap: 20px;
 
-		& > [data-reserved='true'] {
+		& > [data-reserved] {
 			background-color: #ffb731;
 			border: 4px solid #ffb731;
 			color: #fff;
