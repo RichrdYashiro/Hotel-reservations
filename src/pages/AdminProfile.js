@@ -7,11 +7,11 @@ import { useEffect, useState } from 'react';
 import { RoomItem } from '../components/roomItem';
 import { useDispatch } from 'react-redux';
 import { fetchRooms } from '../actions/Room-actions';
-import { selectUserLogin, selectUserRole } from '../selectors';
+import { selectUserRole } from '../selectors';
 
 const AdminProfileContainer = ({ className }) => {
 	const dispatch = useDispatch();
-	const login = useSelector(selectUserLogin);
+
 	useEffect(() => {
 		dispatch(fetchRooms());
 	}, [dispatch]);
