@@ -8,6 +8,14 @@ export const addBooking = (roomId, userId) => async (dispatch, getState) => {
 	}
 
 	try {
+		const oldBookings = await fetch(`http://localhost:3005/booking?roomId=${roomId}`);
+		const oldBookingsData = await oldBookings.json();
+		for (const booking of oldBookingsData) {
+			await fetch(`http://localhost:3005/booking/${booking.id}`, {
+				method: 'DELETE',
+			});
+		}
+
 		dispatch({
 			type: 'UPDATE_ROOM_RESERVATION',
 			payload: { roomId, userId },
@@ -43,6 +51,14 @@ export const deleteBooking = (roomId) => async (dispatch) => {
 			},
 			body: JSON.stringify({ reservation: null }),
 		});
+		const response = await fetch(`http://localhost:3005/booking?roomId=${roomId}`);
+		const bookings = await response.json();
+
+		for (const booking of bookings) {
+			await fetch(`http://localhost:3005/booking/${booking.id}`, {
+				method: 'DELETE',
+			});
+		}
 
 		dispatch({
 			type: 'DELETE_ROOM_RESERVATION',

@@ -39,9 +39,20 @@ export const roomsReducer = (state = initialRoomsState, action) => {
 				rooms: state.rooms.map((room) =>
 					room.id === roomId ? { ...room, reservation: userId } : room,
 				),
+				room:
+					state.room && state.room.id === roomId
+						? { ...state.room, reservation: userId }
+						: state.room,
 			};
 		}
-
+		case 'UPDATE_ROOM_SUCCESS':
+			return {
+				...state,
+				room: action.payload,
+				rooms: state.rooms.map((room) =>
+					room.id === action.payload.id ? action.payload : room,
+				),
+			};
 		case 'DELETE_ROOM_RESERVATION':
 			return {
 				...state,
@@ -50,6 +61,10 @@ export const roomsReducer = (state = initialRoomsState, action) => {
 						? { ...room, reservation: null }
 						: room,
 				),
+				room:
+					state.room && state.room.id === action.payload.roomId
+						? { ...state.room, reservation: null }
+						: state.room,
 			};
 		default:
 			return state;

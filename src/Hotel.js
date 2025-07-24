@@ -7,6 +7,7 @@ import {
 	Profile,
 	Registration,
 	RoomDetails,
+	RoomEdit,
 } from './pages';
 export const Hotel = () => {
 	return (
@@ -15,6 +16,7 @@ export const Hotel = () => {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/room/:id" element={<RoomDetails />} />
+				<Route path="/room/:id/edit" element={<RoomEdit />} />
 				<Route path="/authorization" element={<Authorization />} />
 				<Route path="/registration" element={<Registration />} />
 				<Route path="/profile" element={<Profile />} />
