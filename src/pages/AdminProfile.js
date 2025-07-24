@@ -3,17 +3,29 @@ import { H2 } from '../components';
 import { ROLE } from '../constants/role';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { RoomItem } from '../components/roomItem';
 import { useDispatch } from 'react-redux';
 import { fetchRooms } from '../actions/Room-actions';
 import { selectUserRole } from '../selectors';
+
 const AdminProfileContainer = ({ className }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		dispatch(fetchRooms());
 	}, [dispatch]);
+	const [users, setUsers] = useState({});
+
+	useEffect(() => {
+		fetch('http://localhost:3005/users')
+			.then((response) => response.json())
+			.then((data) => {
+				const map = {};
+				data.forEach((user) => (map[user.id] = user.login));
+				setUsers(map);
+			});
+	}, []);
 
 	const { rooms } = useSelector((state) => state.rooms);
 
@@ -34,6 +46,9 @@ const AdminProfileContainer = ({ className }) => {
 				{rooms.map((room) => (
 					<RoomItem key={room.id} data-reserved={room.reservation}>
 						<h3>{room.title}</h3>
+						{room.reservation && (
+							<span>Зарезервирован: {users[room.reservation]}</span>
+						)}
 					</RoomItem>
 				))}
 			</div>
@@ -51,7 +66,7 @@ export const AdminProfile = styled(AdminProfileContainer)`
 		grid-template-columns: 1fr 1fr 1fr 1fr;
 		gap: 20px;
 
-		& > [data-reserved='true'] {
+		& > [data-reserved] {
 			background-color: #ffb731;
 			border: 4px solid #ffb731;
 			color: #fff;

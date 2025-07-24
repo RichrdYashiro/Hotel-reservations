@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getRoom } from '../actions/Room-actions';
@@ -6,10 +6,11 @@ import styled from 'styled-components';
 import { Button, H2 } from '../components';
 import { ROLE } from '../constants/role';
 import { selectUserId, selectUserRole } from '../selectors';
-import { addBooking } from '../actions/add-booking';
+import { addBooking, deleteBooking } from '../actions/add-booking';
 
 const RoomDetailsContainer = ({ className }) => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const { id } = useParams();
 	const { room } = useSelector((state) => state.rooms);
 	const roleId = useSelector(selectUserRole);
@@ -18,6 +19,13 @@ const RoomDetailsContainer = ({ className }) => {
 	}, [dispatch, id]);
 
 	const userId = useSelector(selectUserId);
+	const bookAddRoom = () => {
+		dispatch(addBooking(room.id, userId));
+	};
+
+	const bookDeleteRoom = () => {
+		dispatch(deleteBooking(room.id));
+	};
 
 	return (
 		<div className={className}>
@@ -26,16 +34,30 @@ const RoomDetailsContainer = ({ className }) => {
 					<img src={room.img} alt={room.title} />
 					<div className="roomInner">
 						<H2>Забронировать: {room.title}</H2>
+						<p>
+							Цена за номер: <b>{room.price}$</b>
+						</p>
 						<p>{room.description}</p>
-						{roleId !== ROLE.READER && (
-							<Button onClick={() => dispatch(addBooking(room.id, userId))}>
-								Забронировать
+						{roleId === ROLE.ADMIN && (
+							<Button onClick={() => navigate(`/room/${room.id}/edit`)}>
+								Редактировать номер
 							</Button>
 						)}
-						{roleId === ROLE.READER && (
+						{roleId === ROLE.READER ? (
 							<Button className="noUser">
 								<Link to="/authorization">Забронировать</Link>
 							</Button>
+						) : room.reservation === userId ? (
+							<>
+								<span className="booking-status booked-by-user">
+									Вы забронировали
+								</span>
+								<button onClick={bookDeleteRoom}>Отменить</button>
+							</>
+						) : room.reservation ? (
+							<span className="booking-status booked">Забронирован</span>
+						) : (
+							<Button onClick={bookAddRoom}>Забронировать</Button>
 						)}
 					</div>
 				</>

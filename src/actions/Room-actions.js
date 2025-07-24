@@ -16,6 +16,10 @@ export const getRoomsFailure = (error) => ({
 	type: 'GET_ROOMS_FAILURE',
 	payload: error,
 });
+export const updateRoomSuccess = (room) => ({
+	type: 'UPDATE_ROOM_SUCCESS',
+	payload: room,
+});
 
 export const fetchRooms = () => {
 	return async (dispatch) => {
@@ -36,4 +40,31 @@ export const getRoom = (id) => async (dispatch) => {
 	const data = await response.json();
 
 	dispatch(getRoomSuccess(data));
+};
+
+export const editRoom = (id, updatedData) => async (dispatch) => {
+	try {
+		const response = await fetch(`http://localhost:3005/rooms/${id}`, {
+			method: 'PATCH',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(updatedData),
+		});
+
+		if (!response.ok) {
+			const errorText = await response.text();
+			return {
+				error: `Ошибка при обновлении комнаты: ${response.status} ${errorText}`,
+			};
+		}
+
+		const updatedRoom = await response.json();
+
+		dispatch(updateRoomSuccess(updatedRoom));
+
+		return { res: updatedRoom };
+	} catch (error) {
+		return { error: `Ошибка сети: ${error.message}` };
+	}
 };

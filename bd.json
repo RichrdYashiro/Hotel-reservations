@@ -1,44 +1,26 @@
 {
   "users": [
     {
-      "id": "001",
+      "id": "8697",
       "login": "admin",
+      "password": "123456",
+      "role_id": 1
+    },
+    {
+      "id": "001",
+      "login": "admin1",
       "password": "123456",
       "role_id": 0
     },
     {
-      "id": "8697",
-      "login": "admin1",
+      "id": "894c",
+      "login": "Richard12",
       "password": "123456",
       "role_id": 1
     },
     {
-      "id": "9f96",
-      "login": "admin3",
-      "password": "123456",
-      "role_id": 1
-    },
-    {
-      "id": "d032",
-      "login": "admin34",
-      "password": "123456",
-      "role_id": 1
-    },
-    {
-      "id": "a19d",
-      "login": "admin11",
-      "password": "123456",
-      "role_id": 1
-    },
-    {
-      "id": "d76d",
-      "login": "Richard121",
-      "password": "123456",
-      "role_id": 1
-    },
-    {
-      "id": "c4eb",
-      "login": "admins",
+      "id": "298a",
+      "login": "Richard1212",
       "password": "123456",
       "role_id": 1
     }
@@ -57,93 +39,103 @@
       "name": "reader"
     }
   ],
-  "booking" : [
-
-  ],
+  "booking": [],
   "rooms": [
     {
       "id": "001",
-      "title": "Номер 1",
-      "reservation": true,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "title": "Номер 22",
+      "reservation": null,
+      "description": "gfdgggggggggg",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": "1000"
     },
     {
       "id": "002",
       "title": "Номер 2",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     },
     {
       "id": "003",
-      "title": "Номер 3",
-      "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "title": "Номер 3333",
+      "reservation": "894c",
+      "img": "/rooms/img/room-demo.jpg",
+      "description": "Описание к номеру2222",
+      "price": 1000
     },
     {
       "id": "004",
       "title": "Номер 4",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     },
     {
       "id": "005",
       "title": "Номер 5",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     },
     {
       "id": "006",
       "title": "Номер 6",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     },
     {
       "id": "007",
       "title": "Номер 7",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     },
     {
       "id": "008",
       "title": "Номер 8",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     },
     {
       "id": "009",
       "title": "Номер 9",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     },
     {
       "id": "010",
       "title": "Номер 10",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     },
     {
       "id": "011",
       "title": "Номер 11",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     },
     {
       "id": "012",
       "title": "Номер 12",
       "reservation": null,
-      "descriontion": "Описание к номеру",
-      "img": "/rooms/img/room-demo.jpg"
+      "description": "Описание к номеру",
+      "img": "/rooms/img/room-demo.jpg",
+      "price": 1000
     }
   ]
 }

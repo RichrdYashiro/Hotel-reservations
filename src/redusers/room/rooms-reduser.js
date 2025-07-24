@@ -1,8 +1,9 @@
 const initialRoomsState = {
 	rooms: [],
 	room: null,
-	loading: false,
+	loading: null,
 	error: null,
+	reservation: null,
 };
 
 export const roomsReducer = (state = initialRoomsState, action) => {
@@ -31,17 +32,40 @@ export const roomsReducer = (state = initialRoomsState, action) => {
 			};
 		}
 		case 'UPDATE_ROOM_RESERVATION': {
-			const { roomId, reservation, userId } = action.payload;
+			const { roomId, userId } = action.payload;
 
 			return {
 				...state,
 				rooms: state.rooms.map((room) =>
-					room.id === roomId
-						? { ...room, reservation, reservedBy: userId }
-						: room,
+					room.id === roomId ? { ...room, reservation: userId } : room,
 				),
+				room:
+					state.room && state.room.id === roomId
+						? { ...state.room, reservation: userId }
+						: state.room,
 			};
 		}
+		case 'UPDATE_ROOM_SUCCESS':
+			return {
+				...state,
+				room: action.payload,
+				rooms: state.rooms.map((room) =>
+					room.id === action.payload.id ? action.payload : room,
+				),
+			};
+		case 'DELETE_ROOM_RESERVATION':
+			return {
+				...state,
+				rooms: state.rooms.map((room) =>
+					room.id === action.payload.roomId
+						? { ...room, reservation: null }
+						: room,
+				),
+				room:
+					state.room && state.room.id === action.payload.roomId
+						? { ...state.room, reservation: null }
+						: state.room,
+			};
 		default:
 			return state;
 	}
