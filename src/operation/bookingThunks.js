@@ -1,3 +1,5 @@
+import { updateRoomReservation, deleteRoomReservation } from '../actions/booking';
+
 export const addBooking = (roomId, userId) => async (dispatch, getState) => {
 	const state = getState();
 	const room = state.rooms.rooms.find((room) => room.id === roomId);
@@ -16,10 +18,7 @@ export const addBooking = (roomId, userId) => async (dispatch, getState) => {
 			});
 		}
 
-		dispatch({
-			type: 'UPDATE_ROOM_RESERVATION',
-			payload: { roomId, userId },
-		});
+		dispatch(updateRoomReservation(roomId, userId));
 
 		await fetch(`http://localhost:3005/rooms/${roomId}`, {
 			method: 'PATCH',
@@ -60,10 +59,7 @@ export const deleteBooking = (roomId) => async (dispatch) => {
 			});
 		}
 
-		dispatch({
-			type: 'DELETE_ROOM_RESERVATION',
-			payload: { roomId },
-		});
+		dispatch(deleteRoomReservation(roomId));
 	} catch (error) {
 		console.error('Ошибка при отмене бронирования:', error);
 		alert('Не удалось отменить бронь');

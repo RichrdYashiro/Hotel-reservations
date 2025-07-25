@@ -51,11 +51,11 @@
     },
     {
       "id": "002",
-      "title": "Номер 2",
+      "title": "Номер 24",
       "reservation": null,
-      "description": "Описание к номеру",
+      "description": "Описание к номеруfsdfsdf",
       "img": "/rooms/img/room-demo.jpg",
-      "price": 1000
+      "price": "2500"
     },
     {
       "id": "003",

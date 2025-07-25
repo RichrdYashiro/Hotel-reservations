@@ -6,8 +6,8 @@ import { Link } from 'react-router';
 import { useEffect, useState } from 'react';
 import { RoomItem } from '../components/roomItem';
 import { useDispatch } from 'react-redux';
-import { fetchRooms } from '../actions/Room-actions';
 import { selectUserRole } from '../selectors';
+import { fetchRooms } from '../operation/roomThunks';
 
 const AdminProfileContainer = ({ className }) => {
 	const dispatch = useDispatch();

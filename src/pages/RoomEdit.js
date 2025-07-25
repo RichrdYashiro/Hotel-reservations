@@ -1,13 +1,12 @@
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { editRoom, getRoom } from '../actions/Room-actions';
+import { editRoom, getRoom } from '../operation/roomThunks';
 import styled from 'styled-components';
 import { H2 } from '../components';
 import { ROLE } from '../constants/role';
 import { selectUserRole } from '../selectors';
 import { Input } from '../components/input';
-
 const RoomEditContainer = ({ className }) => {
 	const dispatch = useDispatch();
 	const { id } = useParams();
