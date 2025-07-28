@@ -1,4 +1,6 @@
+// src/reducers/user.js
 import { ROLE } from '../../constants/role';
+
 const initialUserState = {
 	login: null,
 	id: null,
@@ -8,9 +10,12 @@ const initialUserState = {
 export const userReducer = (state = initialUserState, action) => {
 	switch (action.type) {
 		case 'SET_USER': {
+			const { userId, login, role_id } = action.payload;
 			return {
 				...state,
-				...action.payload,
+				id: userId,
+				login,
+				roleId: role_id,
 			};
 		}
 		default:

@@ -7,6 +7,8 @@ import { ROLE } from '../constants/role';
 const HeaderContainer = ({ className }) => {
 	const roleId = useSelector(selectUserRole);
 	const login = useSelector(selectUserLogin);
+	console.log('roleId:', roleId); // ← смотрим в консоль
+	console.log('login:', login);
 	return (
 		<header className={className}>
 			<Link to="/">Забронируй номер</Link>

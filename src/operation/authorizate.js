@@ -1,27 +1,21 @@
-import { GetUser } from '../api';
 export const Authorizate = async (authLogin, authPassword) => {
-	const user = await GetUser(authLogin);
+	try {
+		const response = await fetch('http://localhost:5000/api/auth/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ login: authLogin, password: authPassword }),
+		});
 
-	if (!user) {
-		return {
-			error: 'Такой пользователей не найдет',
-			res: null,
-		};
-	}
-	const { id, login, password, roleId } = user;
-	if (authPassword !== password) {
-		return {
-			error: 'Неверный пароль',
-			res: null,
-		};
-	}
+		const data = await response.json();
 
-	return {
-		error: null,
-		res: {
-			login,
-			id,
-			roleId,
-		},
-	};
+		if (response.ok) {
+			return { error: null, res: data };
+		} else {
+			return { error: data.message, res: null };
+		}
+	} catch (err) {
+		return { error: 'Ошибка сети', res: null };
+	}
 };

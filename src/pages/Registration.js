@@ -20,14 +20,14 @@ const regFormSchema = yup.object().shape({
 		.required('Заполните логин')
 		.matches(/^\w+$/, 'Неверный логин. Допускаются только буквы и цифры')
 		.min(3, 'Неверный логин. Минимум 3 символов')
-		.max(15, 'Неверный логин. Масимум 15 символов'),
+		.max(15, 'Неверный логин. Максимум 15 символов'),
 
 	password: yup
 		.string()
 		.required('Заполните пароль')
 		.matches(/^[\w#%]+$/, 'Неверный пароль. Недоступные символы')
 		.min(6, 'Неверный пароль. Минимум 6 символов')
-		.max(25, 'Неверный пароль. Масимум 25 символов'),
+		.max(25, 'Неверный пароль. Максимум 25 символов'),
 
 	checkpassword: yup
 		.string()
@@ -62,6 +62,7 @@ const RegistrationContainer = ({ className }) => {
 				return;
 			}
 			dispatch(setUser(res));
+			window.location.href = '/authorization';
 		});
 	};
 	if (roleId !== ROLE.READER) {

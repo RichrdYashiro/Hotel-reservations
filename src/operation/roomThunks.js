@@ -10,8 +10,8 @@ export const fetchRooms = () => {
 	return async (dispatch) => {
 		dispatch(getRoomsRequest());
 		try {
-			const response = await fetch('http://localhost:3005/rooms');
-			if (!response.ok) throw new Error('Ошибка при загрузке');
+			const response = await fetch('http://localhost:5000/api/rooms');
+			if (!response.ok) throw new Error('Ошибка при загрузке номеров');
 			const data = await response.json();
 			dispatch(getRoomsSuccess(data));
 		} catch (err) {
@@ -21,7 +21,7 @@ export const fetchRooms = () => {
 };
 
 export const getRoom = (id) => async (dispatch) => {
-	const response = await fetch(`http://localhost:3005/rooms/${id}`);
+	const response = await fetch(`http://localhost:5000/api/rooms/${id}`);
 	if (!response.ok) throw new Error('Ошибка загрузки комнаты');
 	const data = await response.json();
 	dispatch(getRoomSuccess(data));
@@ -29,7 +29,7 @@ export const getRoom = (id) => async (dispatch) => {
 
 export const editRoom = (id, updatedData) => async (dispatch) => {
 	try {
-		const response = await fetch(`http://localhost:3005/rooms/${id}`, {
+		const response = await fetch(`http://localhost:5000/api/rooms/${id}`, {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
