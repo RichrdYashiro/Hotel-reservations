@@ -1,23 +1,21 @@
-import { AddUser } from '../api';
-import { GetUser } from '../api';
+export const Registrate = async (login, password) => {
+	try {
+		const response = await fetch('http://localhost:5000/api/auth/register', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ login, password }),
+		});
 
-export const Registrate = async (regLogin, regPassword) => {
-	const existedUser = await GetUser(regLogin);
+		const data = await response.json();
 
-	if (existedUser) {
-		return {
-			error: 'Пользователь с таким логином уже существует',
-			res: null,
-		};
+		if (response.ok) {
+			return { res: data, error: null };
+		} else {
+			return { error: data.message, res: null };
+		}
+	} catch (err) {
+		return { error: 'Ошибка сети', res: null };
 	}
-	const user = await AddUser(regLogin, regPassword);
-
-	return {
-		error: null,
-		res: {
-			login: user.login,
-			id: user.id,
-			roleId: user.role_id,
-		},
-	};
 };

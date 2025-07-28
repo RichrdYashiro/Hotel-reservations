@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '../components';
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { Authorizate } from '../operation/authorizate';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../actions/user';
@@ -32,7 +33,7 @@ const authFormSchema = yup.object().shape({
 
 const AuthorizationContainer = ({ className }) => {
 	const dispatch = useDispatch();
-
+	const navigate = useNavigate();
 	const [ServerError, setServerError] = useState(null);
 	const {
 		register,
@@ -58,6 +59,7 @@ const AuthorizationContainer = ({ className }) => {
 				return;
 			}
 			dispatch(setUser(res));
+			navigate('/');
 		});
 	};
 

@@ -18,12 +18,23 @@ const AdminProfileContainer = ({ className }) => {
 	const [users, setUsers] = useState({});
 
 	useEffect(() => {
-		fetch('http://localhost:3005/users')
-			.then((response) => response.json())
+		fetch('http://localhost:5000/api/auth/users')
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error(`Ошибка: ${response.status}`);
+				}
+				return response.json();
+			})
 			.then((data) => {
 				const map = {};
-				data.forEach((user) => (map[user.id] = user.login));
+				data.forEach((user) => {
+					map[user.id] = user.login;
+				});
 				setUsers(map);
+			})
+			.catch((err) => {
+				console.error('Ошибка загрузки пользователей:', err);
+				setUsers({});
 			});
 	}, []);
 
