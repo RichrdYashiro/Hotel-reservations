@@ -1,13 +1,13 @@
 import styled from 'styled-components';
-import { Button, H2 } from '../components';
+import { H2 } from '../components';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRooms } from '../actions/Room-actions';
+import { fetchRooms } from '../operation/roomThunks';
 import { RoomItem } from '../components/roomItem';
 import { selectUserId, selectUserRole } from '../selectors';
 import { ROLE } from '../constants/role';
 import { Link } from 'react-router';
-import { deleteBooking } from '../actions/add-booking';
+import { deleteBooking } from '../operation/bookingThunks';
 
 const ProfileContainer = ({ className }) => {
 	const dispatch = useDispatch();

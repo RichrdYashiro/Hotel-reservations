@@ -1,12 +1,12 @@
 import { Link, useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getRoom } from '../actions/Room-actions';
 import styled from 'styled-components';
 import { Button, H2 } from '../components';
 import { ROLE } from '../constants/role';
 import { selectUserId, selectUserRole } from '../selectors';
-import { addBooking, deleteBooking } from '../actions/add-booking';
+import { addBooking, deleteBooking } from '../operation/bookingThunks';
+import { getRoom } from '../operation/roomThunks';
 
 const RoomDetailsContainer = ({ className }) => {
 	const dispatch = useDispatch();

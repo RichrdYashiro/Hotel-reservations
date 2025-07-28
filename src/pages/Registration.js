@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Link, Navigate } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { Registrate } from '../operation/registrate';
-import { setUser } from '../actions/set-user';
+import { setUser } from '../actions/user';
 import { ROLE } from '../constants/role';
 import { useSelector } from 'react-redux';
 import { selectUserRole } from '../selectors';

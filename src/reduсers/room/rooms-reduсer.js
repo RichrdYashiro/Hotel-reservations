@@ -1,3 +1,13 @@
+import {
+	GET_ROOMS_REQUEST,
+	GET_ROOMS_SUCCESS,
+	GET_ROOMS_FAILURE,
+	GET_ROOM_SUCCESS,
+	UPDATE_ROOM_SUCCESS,
+	UPDATE_ROOM_RESERVATION,
+	DELETE_ROOM_RESERVATION,
+} from '../../types/roomTypes.js';
+
 const initialRoomsState = {
 	rooms: [],
 	room: null,
@@ -8,30 +18,30 @@ const initialRoomsState = {
 
 export const roomsReducer = (state = initialRoomsState, action) => {
 	switch (action.type) {
-		case 'GET_ROOMS_REQUEST': {
+		case GET_ROOMS_REQUEST: {
 			return {
 				...state,
 				loading: true,
 				error: null,
 			};
 		}
-		case 'GET_ROOMS_SUCCESS': {
+		case GET_ROOMS_SUCCESS: {
 			return {
 				...state,
 				loading: false,
 				rooms: action.payload,
 			};
 		}
-		case 'GET_ROOM_SUCCESS':
+		case GET_ROOM_SUCCESS:
 			return { ...state, room: action.payload };
-		case 'GET_ROOMS_FAILURE': {
+		case GET_ROOMS_FAILURE: {
 			return {
 				...state,
 				loading: false,
 				error: action.payload,
 			};
 		}
-		case 'UPDATE_ROOM_RESERVATION': {
+		case UPDATE_ROOM_RESERVATION: {
 			const { roomId, userId } = action.payload;
 
 			return {
@@ -45,7 +55,7 @@ export const roomsReducer = (state = initialRoomsState, action) => {
 						: state.room,
 			};
 		}
-		case 'UPDATE_ROOM_SUCCESS':
+		case UPDATE_ROOM_SUCCESS:
 			return {
 				...state,
 				room: action.payload,
@@ -53,7 +63,7 @@ export const roomsReducer = (state = initialRoomsState, action) => {
 					room.id === action.payload.id ? action.payload : room,
 				),
 			};
-		case 'DELETE_ROOM_RESERVATION':
+		case DELETE_ROOM_RESERVATION:
 			return {
 				...state,
 				rooms: state.rooms.map((room) =>
@@ -77,7 +87,7 @@ const initialRoomState = {
 
 export const roomReducer = (state = initialRoomState, action) => {
 	switch (action.type) {
-		case 'GET_ROOM_SUCCESS': {
+		case GET_ROOM_SUCCESS: {
 			return {
 				...state,
 				room: action.payload,

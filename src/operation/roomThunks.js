@@ -1,25 +1,10 @@
-export const getRoomsRequest = () => ({
-	type: 'GET_ROOMS_REQUEST',
-});
-
-export const getRoomSuccess = (room) => ({
-	type: 'GET_ROOM_SUCCESS',
-	payload: room,
-});
-
-export const getRoomsSuccess = (rooms) => ({
-	type: 'GET_ROOMS_SUCCESS',
-	payload: rooms,
-});
-
-export const getRoomsFailure = (error) => ({
-	type: 'GET_ROOMS_FAILURE',
-	payload: error,
-});
-export const updateRoomSuccess = (room) => ({
-	type: 'UPDATE_ROOM_SUCCESS',
-	payload: room,
-});
+import {
+	getRoomsRequest,
+	getRoomsSuccess,
+	getRoomsFailure,
+	getRoomSuccess,
+	updateRoomSuccess,
+} from '../actions/rooms';
 
 export const fetchRooms = () => {
 	return async (dispatch) => {
@@ -34,11 +19,11 @@ export const fetchRooms = () => {
 		}
 	};
 };
+
 export const getRoom = (id) => async (dispatch) => {
 	const response = await fetch(`http://localhost:3005/rooms/${id}`);
 	if (!response.ok) throw new Error('Ошибка загрузки комнаты');
 	const data = await response.json();
-
 	dispatch(getRoomSuccess(data));
 };
 
@@ -60,9 +45,7 @@ export const editRoom = (id, updatedData) => async (dispatch) => {
 		}
 
 		const updatedRoom = await response.json();
-
 		dispatch(updateRoomSuccess(updatedRoom));
-
 		return { res: updatedRoom };
 	} catch (error) {
 		return { error: `Ошибка сети: ${error.message}` };

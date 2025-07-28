@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button, H2 } from '../components';
-import { fetchRooms } from '../actions/Room-actions';
+import { fetchRooms } from '../operation/roomThunks';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { RoomItem } from '../components/roomItem';
