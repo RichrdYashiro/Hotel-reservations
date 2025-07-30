@@ -19,9 +19,11 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
 
 mongoose
-	.connect(
-		'mongodb+srv://richardyahiro:Ds2wSIdlXgiOSJBN@cluster0.ouzigow.mongodb.net/hotel?retryWrites=true&w=majority&appName=Cluster0',
-	)
+	.connect(process.env.MONGO_URI, {
+		retryWrites: true,
+		w: 'majority',
+		appName: 'Cluster0',
+	})
 	.then(() => {
 		app.listen(port, () => {
 			console.log(`Бэкенд запущен на http://localhost:${port}`);

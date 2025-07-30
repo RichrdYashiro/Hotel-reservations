@@ -58,7 +58,10 @@ const AdminProfileContainer = ({ className }) => {
 					<RoomItem key={room.id} data-reserved={room.reservation}>
 						<h3>{room.title}</h3>
 						{room.reservation && (
-							<span>Зарезервирован: {users[room.reservation]}</span>
+							<span>
+								Зарезервирован:{' '}
+								{users.login || 'Неизвестный пользователь'}
+							</span>
 						)}
 					</RoomItem>
 				))}
