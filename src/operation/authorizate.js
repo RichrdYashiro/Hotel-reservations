@@ -1,19 +1,32 @@
+// Временная версия авторизации с мок-данными
 export const Authorizate = async (authLogin, authPassword) => {
 	try {
-		const response = await fetch('http://localhost:5000/api/auth/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ login: authLogin, password: authPassword }),
-		});
+		// Имитируем задержку сети
+		await new Promise((resolve) => setTimeout(resolve, 500));
 
-		const data = await response.json();
+		// Мок-данные для тестирования
+		const mockUsers = [
+			{ login: 'admin', password: 'admin123', userId: 1, role_id: 0 },
+			{ login: 'user', password: 'user1231', userId: 2, role_id: 1 },
+			{ login: 'test', password: 'test1231', userId: 3, role_id: 1 },
+		];
 
-		if (response.ok) {
-			return { error: null, res: data };
+		const user = mockUsers.find(
+			(u) => u.login === authLogin && u.password === authPassword,
+		);
+
+		if (user) {
+			// Возвращаем данные пользователя без пароля
+			const { password, ...userData } = user;
+			return {
+				error: null,
+				res: {
+					...userData,
+					token: 'mock-jwt-token-' + Date.now(),
+				},
+			};
 		} else {
-			return { error: data.message, res: null };
+			return { error: 'Неверный логин или пароль', res: null };
 		}
 	} catch (err) {
 		return { error: 'Ошибка сети', res: null };

@@ -1,11 +1,11 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { thunk } from 'redux-thunk';
-import { userReducer, roomsReducer, bookingReducer } from './reduсers';
+import { userReducer, bookingReducer, gamesReducer } from './reduсers';
 
 const reducer = combineReducers({
 	user: userReducer,
-	rooms: roomsReducer,
 	booking: bookingReducer,
+	games: gamesReducer,
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 export const store = createStore(reducer, composeEnhancers(applyMiddleware(thunk)));

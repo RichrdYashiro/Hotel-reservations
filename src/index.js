@@ -4,13 +4,13 @@ import './index.css';
 import { store } from './store';
 import { Hotel } from './Hotel';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<BrowserRouter>
 		<Provider store={store}>
-				<Hotel />
+			<Hotel />
 		</Provider>
-	</BrowserRouter>
+	</BrowserRouter>,
 );
