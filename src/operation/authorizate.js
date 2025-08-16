@@ -1,34 +1,89 @@
-// Временная версия авторизации с мок-данными
+// Реальная авторизация через API
 export const Authorizate = async (authLogin, authPassword) => {
 	try {
-		// Имитируем задержку сети
-		await new Promise((resolve) => setTimeout(resolve, 500));
+		const response = await fetch('http://localhost:5000/api/auth/login', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				login: authLogin,
+				password: authPassword,
+			}),
+			credentials: 'include', // Важно для работы с сессиями
+		});
 
-		// Мок-данные для тестирования
-		const mockUsers = [
-			{ login: 'admin', password: 'admin123', userId: 1, role_id: 0 },
-			{ login: 'user', password: 'user1231', userId: 2, role_id: 1 },
-			{ login: 'test', password: 'test1231', userId: 3, role_id: 1 },
-		];
+		const data = await response.json();
 
-		const user = mockUsers.find(
-			(u) => u.login === authLogin && u.password === authPassword,
-		);
-
-		if (user) {
-			// Возвращаем данные пользователя без пароля
-			const { password, ...userData } = user;
+		if (response.ok) {
 			return {
 				error: null,
 				res: {
-					...userData,
-					token: 'mock-jwt-token-' + Date.now(),
+					userId: data.userId,
+					role_id: data.role_id,
+					token: data.token,
 				},
 			};
 		} else {
-			return { error: 'Неверный логин или пароль', res: null };
+			return { error: data.message || 'Ошибка авторизации', res: null };
 		}
 	} catch (err) {
+		console.error('Ошибка при авторизации:', err);
+		return { error: 'Ошибка сети', res: null };
+	}
+};
+
+// Проверка авторизации по сессии
+export const checkAuth = async () => {
+	try {
+		const response = await fetch('http://localhost:5000/api/auth/check', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include', // Важно для работы с сессиями
+		});
+
+		const data = await response.json();
+
+		if (response.ok) {
+			return {
+				error: null,
+				res: {
+					userId: data.userId,
+					role_id: data.role_id,
+					token: data.token,
+				},
+			};
+		} else {
+			return { error: 'Не авторизован', res: null };
+		}
+	} catch (err) {
+		console.error('Ошибка при проверке авторизации:', err);
+		return { error: 'Ошибка сети', res: null };
+	}
+};
+
+// Выход из системы
+export const logout = async () => {
+	try {
+		const response = await fetch('http://localhost:5000/api/auth/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			credentials: 'include', // Важно для работы с сессиями
+		});
+
+		const data = await response.json();
+
+		if (response.ok) {
+			return { error: null, res: data.message };
+		} else {
+			return { error: data.message || 'Ошибка при выходе', res: null };
+		}
+	} catch (err) {
+		console.error('Ошибка при выходе из системы:', err);
 		return { error: 'Ошибка сети', res: null };
 	}
 };

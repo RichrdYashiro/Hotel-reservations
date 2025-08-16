@@ -1,11 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { getRooms, getRoom, updateRoom } = require('../controllers/roomController');
+const roomController = require('../controllers/roomController');
 
-router.get('/', getRooms);
+// Получение всех комнат
+router.get('/', roomController.getRooms);
 
-router.get('/:id', getRoom);
+// Получение комнаты по ID
+router.get('/:id', roomController.getRoomById);
 
-router.patch('/:id', updateRoom);
+// Создание новой комнаты
+router.post('/', roomController.createRoom);
+
+// Обновление комнаты
+router.put('/:id', roomController.updateRoom);
 
 module.exports = router;

@@ -4,7 +4,9 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { H2, Breadcrumbs } from '../components';
 import { GameItem } from '../components/gameItem';
+import { RoomItem } from '../components/roomItem';
 import { fetchGames } from '../operation/gameThunks';
+import { fetchUserBookings } from '../operation/userBookingsThunks';
 import { selectUserId } from '../selectors';
 
 const ProfileContainer = ({ className }) => {
@@ -12,10 +14,15 @@ const ProfileContainer = ({ className }) => {
 	const navigate = useNavigate();
 	const userId = useSelector(selectUserId);
 	const { games, loading, error } = useSelector((state) => state.games);
+	const { userBookings } = useSelector((state) => state.booking);
+	const { rooms } = useSelector((state) => state.rooms);
 
 	useEffect(() => {
 		dispatch(fetchGames(0, 50, 'price'));
-	}, [dispatch]);
+		if (userId) {
+			dispatch(fetchUserBookings(userId));
+		}
+	}, [dispatch, userId]);
 
 	if (loading) return <div className="loading-container">Загружаем ваш профиль...</div>;
 	if (error) return <div className="error-container">Ошибка: {error}</div>;
@@ -27,8 +34,17 @@ const ProfileContainer = ({ className }) => {
 	// Получаем забронированные игры пользователя
 	const userGames = games.filter((game) => game.reservation === userId);
 
-	// Вычисляем общую стоимость
-	const totalCost = userGames.reduce((sum, game) => sum + game.currentPrice, 0);
+	// Получаем забронированные комнаты пользователя
+	const userRooms = rooms.filter((room) => room.reservation === userId);
+
+	// Вычисляем общую стоимость игр
+	const gamesCost = userGames.reduce((sum, game) => sum + game.currentPrice, 0);
+	
+	// Вычисляем общую стоимость комнат
+	const roomsCost = userRooms.reduce((sum, room) => sum + parseFloat(room.price || 0), 0);
+	
+	// Общая стоимость
+	const totalCost = gamesCost + roomsCost;
 
 	// Функция для форматирования даты
 	const formatDate = (dateString) => {
@@ -77,12 +93,48 @@ const ProfileContainer = ({ className }) => {
 								<span className="cost-amount">{totalCost} ₹</span>
 							</>
 						)}
+
+			{userRooms.length > 0 ? (
+				<>
+					<H2>Ваши забронированные комнаты</H2>
+					<div className="rooms-grid">
+						{userRooms.map((room) => (
+							<RoomItem key={room.id} data-reservat={room.reservation}>
+								<h3>{room.title}</h3>
+								<img src={room.img} alt={room.title} />
+								<p>Цена: {room.price}$</p>
+								<button
+									onClick={() => navigate(`/room/${room.id}`)}
+									className="view-details-button"
+								>
+									Просмотреть детали
+								</button>
+							</RoomItem>
+						))}
+					</div>
+				</>
+			) : (
+				<div className="empty-state">
+					<h3>У вас пока нет забронированных комнат</h3>
+					<p>
+						Перейдите в каталог комнат, чтобы забронировать интересующие вас комнаты
+					</p>
+					<button className="browse-button" onClick={() => navigate('/')}>
+						Перейти к комнатам
+					</button>
+				</div>
+			)}
 					</div>
 				</div>
 
 				<div className="summary-card">
 					<h3>Забронировано игр</h3>
 					<div className="games-count">{userGames.length}</div>
+				</div>
+				
+				<div className="summary-card">
+					<h3>Забронировано комнат</h3>
+					<div className="rooms-count">{userRooms.length}</div>
 				</div>
 			</div>
 
@@ -222,7 +274,8 @@ export const Profile = styled(ProfileContainer)`
 			}
 		}
 
-		.games-count {
+		.games-count,
+	.rooms-count {
 			font-size: 2.5rem;
 			font-weight: 800;
 			color: #667eea;
@@ -230,7 +283,8 @@ export const Profile = styled(ProfileContainer)`
 		}
 	}
 
-	.games-grid {
+	.games-grid,
+	.rooms-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 		gap: 25px;
@@ -253,6 +307,25 @@ export const Profile = styled(ProfileContainer)`
 			background: linear-gradient(45deg, #ee5a24, #ff6b6b);
 			transform: translateY(-2px);
 			box-shadow: 0 8px 20px rgba(255, 107, 107, 0.3);
+		}
+	}
+
+	.view-details-button {
+		background: linear-gradient(45deg, #667eea, #764ba2);
+		border: none;
+		border-radius: 15px;
+		padding: 10px 20px;
+		color: white;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		width: 100%;
+		margin-top: 10px;
+
+		&:hover {
+			background: linear-gradient(45deg, #764ba2, #667eea);
+			transform: translateY(-2px);
+			box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 		}
 	}
 
@@ -308,7 +381,8 @@ export const Profile = styled(ProfileContainer)`
 			padding: 20px;
 		}
 
-		.games-grid {
+		.games-grid,
+		.rooms-grid {
 			grid-template-columns: 1fr;
 			gap: 20px;
 		}

@@ -10,6 +10,11 @@ const initialUserState = {
 export const userReducer = (state = initialUserState, action) => {
 	switch (action.type) {
 		case 'SET_USER': {
+			// Если payload равен null, возвращаем начальное состояние (выход из системы)
+			if (!action.payload) {
+				return initialUserState;
+			}
+			
 			const { userId, login, role_id } = action.payload;
 			return {
 				...state,

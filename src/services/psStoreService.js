@@ -1,12 +1,16 @@
-// PlayStation Store API Service с загрузкой из JSON файла
+// PlayStation Store API Service с интеграцией парсера
+import psStoreParser from './psStoreParser';
+
 class PSStoreService {
 	constructor() {
 		this.baseUrl = '/data/games.json';
+		this.parser = psStoreParser;
 		this.headers = {
 			'Content-Type': 'application/json',
 			Accept: 'application/json',
 		};
 		this.gamesCache = null;
+		this.useParser = true; // Флаг для использования парсера
 	}
 
 	/**
@@ -42,10 +46,26 @@ class PSStoreService {
 	 */
 	async getGames(start = 0, size = 20, sort = 'price') {
 		try {
-			// Имитируем задержку сети
-			await new Promise((resolve) => setTimeout(resolve, 300));
+			let games = [];
+			
+			// Пробуем получить данные из парсера
+			if (this.useParser) {
+				try {
+					games = await this.parser.parseDealsPage();
+					console.log(`Получено ${games.length} игр из PlayStation Store India`);
+				} catch (parserError) {
+					console.warn('Ошибка парсера, используем локальные данные:', parserError);
+					games = await this.loadGamesFromJSON();
+				}
+			} else {
+				games = await this.loadGamesFromJSON();
+			}
+			
+			// Если парсер не вернул данные, используем локальные
+			if (games.length === 0) {
+				games = await this.loadGamesFromJSON();
+			}
 
-			const games = await this.loadGamesFromJSON();
 			let sortedGames = [...games];
 
 			// Сортировка
@@ -216,8 +236,13 @@ class PSStoreService {
 			await new Promise((resolve) => setTimeout(resolve, 200));
 
 			const games = await this.loadGamesFromJSON();
-			// Для демонстрации просто возвращаем первые игры
-			const newReleases = games.slice(0, size);
+			const newReleases = [...games].sort((a, b) => {
+				// Сортируем по дате релиза (новые сначала)
+				const dateA = new Date(a.releaseDate || '2023-01-01');
+				const dateB = new Date(b.releaseDate || '2023-01-01');
+				return dateB - dateA;
+			});
+
 			const paginatedGames = newReleases.slice(start, start + size);
 
 			return {
@@ -228,6 +253,47 @@ class PSStoreService {
 			console.error('Ошибка при получении новых релизов:', error);
 			throw error;
 		}
+	}
+
+	/**
+	 * Переключить использование парсера
+	 * @param {boolean} useParser - Использовать ли парсер
+	 */
+	toggleParser(useParser) {
+		this.useParser = useParser;
+		console.log(`Парсер ${useParser ? 'включен' : 'отключен'}`);
+	}
+
+	/**
+	 * Принудительно обновить данные из парсера
+	 * @returns {Promise<Array>}
+	 */
+	async forceUpdateFromParser() {
+		try {
+			// Очищаем кеш парсера
+			this.parser.clearCache();
+			
+			// Получаем свежие данные
+			const games = await this.parser.parseDealsPage();
+			console.log(`Принудительно обновлено ${games.length} игр из PlayStation Store India`);
+			
+			return games;
+		} catch (error) {
+			console.error('Ошибка при принудительном обновлении:', error);
+			throw error;
+		}
+	}
+
+	/**
+	 * Получить статистику парсера
+	 * @returns {Object}
+	 */
+	getParserStats() {
+		return {
+			useParser: this.useParser,
+			cacheSize: this.parser.cache.size,
+			lastUpdate: this.parser.cache.get('deals_page')?.timestamp || null
+		};
 	}
 }
 

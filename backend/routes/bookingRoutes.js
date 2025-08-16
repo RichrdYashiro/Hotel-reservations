@@ -1,8 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const { createBooking, deleteBooking } = require('../controllers/bookingController');
+const bookingController = require('../controllers/bookingController');
 
-router.post('/bookings', createBooking);
-router.delete('/bookings', deleteBooking);
+// Создание бронирования
+router.post('/', bookingController.createBooking);
+
+// Удаление бронирования
+router.delete('/:id', bookingController.deleteBooking);
+
+// Получение бронирований пользователя
+router.get('/user/:userId', bookingController.getBookingsByUserId);
+
+// Получение бронирования по ID комнаты
+router.get('/room/:roomId', bookingController.getBookingByRoomId);
 
 module.exports = router;

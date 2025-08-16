@@ -1,37 +1,69 @@
-const Room = require('../models/Room');
+const Room = require('../models/mysql/Room');
 
-exports.getRooms = async (req, res) => {
+const getRooms = async (req, res) => {
 	try {
-		const rooms = await Room.find();
+		const rooms = await Room.findAll();
 		res.json(rooms);
-	} catch (err) {
-		res.status(500).json({ message: 'Ошибка загрузки номеров' });
+	} catch (e) {
+		console.error('Ошибка при получении комнат:', e);
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
 	}
 };
 
-exports.getRoom = async (req, res) => {
+const getRoomById = async (req, res) => {
 	try {
-		const room = await Room.findOne({ id: req.params.id });
+		const room = await Room.findById(req.params.id);
+
 		if (!room) {
-			return res.status(404).json({ message: 'Номер не найден' });
+			return res.status(404).json({ message: 'Комната не найдена' });
 		}
+
 		res.json(room);
-	} catch (err) {
-		res.status(500).json({ message: 'Ошибка загрузки номера' });
+	} catch (e) {
+		console.error('Ошибка при получении комнаты:', e);
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
 	}
 };
 
-exports.updateRoom = async (req, res) => {
+const createRoom = async (req, res) => {
 	try {
-		const room = await Room.findOneAndUpdate({ id: req.params.id }, req.body, {
-			new: true,
-			runValidators: true,
+		const { title, description, image, price } = req.body;
+
+		if (!title || !description || !image || !price) {
+			return res.status(400).json({ message: 'Все поля обязательны для заполнения' });
+		}
+
+		const room = await Room.create({
+			title,
+			description,
+			image,
+			price,
+			reservation: false
 		});
-		if (!room) {
-			return res.status(404).json({ message: 'Номер не найден' });
-		}
-		res.json(room);
-	} catch (err) {
-		res.status(500).json({ message: 'Ошибка обновления номера' });
+
+		res.status(201).json(room);
+	} catch (e) {
+		console.error('Ошибка при создании комнаты:', e);
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
 	}
 };
+
+const updateRoom = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const updateData = req.body;
+
+		const room = await Room.findById(id);
+		if (!room) {
+			return res.status(404).json({ message: 'Комната не найдена' });
+		}
+
+		const updatedRoom = await Room.update(id, updateData);
+		res.json(updatedRoom);
+	} catch (e) {
+		console.error('Ошибка при обновлении комнаты:', e);
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
+	}
+};
+
+module.exports = { getRooms, getRoomById, createRoom, updateRoom };

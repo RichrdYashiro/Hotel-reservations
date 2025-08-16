@@ -1,12 +1,27 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectUserLogin, selectUserRole } from '../selectors';
 import { ROLE } from '../constants/role';
+import { logout } from '../operation/authorizate';
+import { setUser } from '../actions/user';
 
 const HeaderContainer = ({ className }) => {
 	const roleId = useSelector(selectUserRole);
 	const login = useSelector(selectUserLogin);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	
+	// Функция выхода из системы
+	const handleLogout = async () => {
+		const result = await logout();
+		if (!result.error) {
+			// Очищаем данные пользователя в Redux
+			dispatch(setUser(null));
+			// Перенаправляем на главную страницу
+			navigate('/');
+		}
+	};
 
 	return (
 		<header className={className}>
@@ -45,9 +60,19 @@ const HeaderContainer = ({ className }) => {
 						<Link to="/profile" className="profile-link">
 							Профиль
 						</Link>
+						<button onClick={handleLogout} className="logout-btn">
+							Выход
+						</button>
 					</div>
 				) : roleId === ROLE.ADMIN ? (
 					<div className="admin-info">
+						<span className="welcome">Админ: {login}</span>
+						<Link to="/adminprofile" className="profile-link">
+							Панель администратора
+						</Link>
+						<button onClick={handleLogout} className="logout-btn">
+							Выход
+						</button>
 						<span className="admin-badge">👑 Админ</span>
 						<span className="admin-name">{login}</span>
 						<Link to="/adminprofile" className="admin-link">

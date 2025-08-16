@@ -1,45 +1,121 @@
-const Booking = require('../models/Booking');
-const Room = require('../models/Room');
+const Booking = require('../models/mysql/Booking');
+const Room = require('../models/mysql/Room');
 
-exports.createBooking = async (req, res) => {
-	const { roomId, userId } = req.body;
-
+const createBooking = async (req, res) => {
 	try {
-		const existingBooking = await Booking.findOne({ roomId });
-		if (existingBooking) {
-			return res.status(400).json({ message: 'Номер уже забронирован' });
+		const { userId, roomId } = req.body;
+
+		if (!userId || !roomId) {
+			return res.status(400).json({ message: 'Все поля обязательны для заполнения' });
 		}
 
-		const room = await Room.findOne({ id: roomId });
+		const room = await Room.findById(roomId);
+
 		if (!room) {
-			return res.status(404).json({ message: 'Номер не найден' });
+			return res.status(404).json({ message: 'Комната не найдена' });
 		}
 
-		const booking = new Booking({ roomId, userId });
-		await booking.save();
+		if (room.reservation) {
+			return res.status(400).json({ message: 'Комната уже забронирована' });
+		}
 
-		await Room.findOneAndUpdate({ id: roomId }, { reservation: userId });
+		// Создаем бронирование
+		const booking = await Booking.create({
+			user_id: userId,
+			room_id: roomId,
+			date: new Date()
+		});
 
-		res.status(201).json(booking);
-	} catch (err) {
-		console.error('Ошибка в createBooking:', err);
-		res.status(500).json({ message: 'Ошибка сервера' });
+		// Обновляем статус комнаты
+		await Room.update(roomId, { reservation: true });
+
+		// Возвращаем созданное бронирование
+		res.status(201).json({ 
+			message: 'Бронирование создано', 
+			booking: {
+				id: booking.id,
+				userId: booking.user_id,
+				roomId: booking.room_id,
+				date: booking.date
+			}
+		});
+	} catch (e) {
+		console.error('Ошибка при создании бронирования:', e);
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
 	}
 };
 
-exports.deleteBooking = async (req, res) => {
-	const { roomId } = req.body;
-
+const deleteBooking = async (req, res) => {
 	try {
-		const booking = await Booking.findOneAndDelete({ roomId });
+		const { id } = req.params;
+
+		// Находим бронирование
+		const booking = await Booking.findById(id);
+
 		if (!booking) {
-			return res.status(404).json({ message: 'Бронь не найдена' });
+			return res.status(404).json({ message: 'Бронирование не найдено' });
 		}
 
-		await Room.findOneAndUpdate({ id: roomId }, { reservation: null });
+		// Обновляем статус комнаты
+		const room = await Room.findById(booking.room_id);
+		if (room) {
+			await Room.update(booking.room_id, { reservation: false });
+		}
 
-		res.json({ message: 'Бронь отменена' });
-	} catch (err) {
-		res.status(500).json({ message: 'Ошибка при отмене брони' });
+		// Удаляем бронирование
+		await Booking.delete(id);
+
+		res.json({ message: 'Бронирование удалено' });
+	} catch (e) {
+		console.error('Ошибка при удалении бронирования:', e);
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
 	}
 };
+
+const getBookingsByUserId = async (req, res) => {
+	try {
+		const { userId } = req.params;
+
+		// Получаем все бронирования пользователя
+		const bookings = await Booking.findByUserId(userId);
+
+		// Получаем информацию о комнатах для каждого бронирования
+		const bookingsWithRooms = await Promise.all(
+			bookings.map(async (booking) => {
+				const room = await Room.findById(booking.room_id);
+				return {
+					id: booking.id,
+					userId: booking.user_id,
+					roomId: booking.room_id,
+					date: booking.date,
+					room: room || { title: 'Комната не найдена' }
+				};
+			})
+		);
+
+		res.json(bookingsWithRooms);
+	} catch (e) {
+		console.error('Ошибка при получении бронирований:', e);
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
+	}
+};
+
+const getBookingByRoomId = async (req, res) => {
+	try {
+		const { roomId } = req.params;
+
+		// Находим бронирование по ID комнаты
+		const booking = await Booking.findOne({ roomId });
+
+		if (!booking) {
+			return res.status(404).json({ message: 'Бронирование не найдено' });
+		}
+
+		res.json(booking);
+	} catch (e) {
+		console.error('Ошибка при получении бронирования:', e);
+		res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
+	}
+};
+
+module.exports = { createBooking, deleteBooking, getBookingsByUserId, getBookingByRoomId };

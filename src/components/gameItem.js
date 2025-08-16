@@ -9,16 +9,16 @@ const GameItemContainer = ({ className, children, ...props }) => {
 };
 
 export const GameItem = styled(GameItemContainer)`
-	background: rgba(255, 255, 255, 0.06);
+	background: rgba(26, 31, 53, 0.8);
 	backdrop-filter: blur(15px);
-	border: 1px solid rgba(255, 255, 255, 0.12);
+	border: 1px solid rgba(0, 201, 255, 0.15);
 	border-radius: 20px;
 	padding: 20px;
-	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	transition: all 0.4s ease;
 	position: relative;
 	overflow: hidden;
 	cursor: pointer;
-	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+	box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
 
 	&::before {
 		content: '';
@@ -27,7 +27,7 @@ export const GameItem = styled(GameItemContainer)`
 		left: 0;
 		right: 0;
 		height: 2px;
-		background: linear-gradient(90deg, #667eea, #764ba2);
+		background: linear-gradient(90deg, #00c9ff, #00e676);
 		transform: scaleX(0);
 		transition: transform 0.4s ease;
 	}
@@ -41,8 +41,8 @@ export const GameItem = styled(GameItemContainer)`
 		height: 100%;
 		background: linear-gradient(
 			135deg,
-			rgba(102, 126, 234, 0.06),
-			rgba(118, 75, 162, 0.06)
+			rgba(0, 201, 255, 0.08),
+			rgba(0, 230, 118, 0.08)
 		);
 		opacity: 0;
 		transition: opacity 0.3s ease;
@@ -50,12 +50,11 @@ export const GameItem = styled(GameItemContainer)`
 	}
 
 	&:hover {
-		transform: translateY(-8px) scale(1.02);
 		box-shadow:
-			0 25px 50px rgba(0, 0, 0, 0.3),
-			0 0 30px rgba(102, 126, 234, 0.2);
-		border-color: rgba(102, 126, 234, 0.4);
-		background: rgba(255, 255, 255, 0.08);
+			0 15px 30px rgba(0, 0, 0, 0.3),
+			0 0 20px rgba(0, 201, 255, 0.2);
+		border-color: rgba(0, 201, 255, 0.4);
+		background: rgba(26, 31, 53, 0.9);
 	}
 
 	&:hover::before {
@@ -86,11 +85,11 @@ export const GameItem = styled(GameItemContainer)`
 		transition: all 0.3s ease;
 		position: relative;
 		z-index: 1;
-		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+		border: 2px solid transparent;
 	}
 
 	&:hover img {
-		transform: scale(1.05);
 		box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 	}
 
@@ -106,7 +105,7 @@ export const GameItem = styled(GameItemContainer)`
 	.current-price {
 		font-size: 1.3rem;
 		font-weight: 800;
-		background: linear-gradient(45deg, #667eea, #764ba2);
+		background: linear-gradient(45deg, #00c9ff, #00e676);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
 		background-clip: text;
@@ -121,7 +120,7 @@ export const GameItem = styled(GameItemContainer)`
 	}
 
 	.discount-badge {
-		background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+		background: linear-gradient(45deg, #ff6b6b, #ff9f43);
 		color: white;
 		padding: 4px 12px;
 		border-radius: 15px;
@@ -144,14 +143,14 @@ export const GameItem = styled(GameItemContainer)`
 	.platform {
 		background: linear-gradient(
 			45deg,
-			rgba(102, 126, 234, 0.2),
-			rgba(118, 75, 162, 0.2)
+			rgba(0, 201, 255, 0.15),
+			rgba(0, 230, 118, 0.15)
 		);
-		border: 1px solid rgba(102, 126, 234, 0.3);
+		border: 1px solid rgba(0, 201, 255, 0.3);
 		padding: 4px 12px;
 		border-radius: 12px;
 		font-size: 0.75rem;
-		color: #667eea;
+		color: #00c9ff;
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.5px;

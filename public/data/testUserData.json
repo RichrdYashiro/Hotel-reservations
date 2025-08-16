@@ -1,0 +1,169 @@
+{
+	"testUsers": [
+		{
+			"id": 1,
+			"login": "testuser",
+			"password": "password123",
+			"email": "test@example.com",
+			"firstName": "Тест",
+			"lastName": "Пользователь",
+			"avatar": "https://via.placeholder.com/150x150/4A90E2/FFFFFF?text=ТП",
+			"role": "user",
+			"registrationDate": "2024-01-15",
+			"lastLogin": "2024-01-20T10:30:00Z",
+			"isActive": true
+		},
+		{
+			"id": 2,
+			"login": "admin",
+			"password": "admin12311",
+			"email": "admin13211",
+			"firstName": "Админ",
+			"lastName": "Администратор",
+			"avatar": "https://via.placeholder.com/150x150/E74C3C/FFFFFF?text=АА",
+			"role": "admin",
+			"registrationDate": "2023-12-01",
+			"lastLogin": "2024-01-20T15:45:00Z",
+			"isActive": true
+		},
+		{
+			"id": 3,
+			"login": "gamer123",
+			"password": "gamer456",
+			"email": "gamer@example.com",
+			"firstName": "Игорь",
+			"lastName": "Геймеров",
+			"avatar": "https://via.placeholder.com/150x150/27AE60/FFFFFF?text=ИГ",
+			"role": "user",
+			"registrationDate": "2024-01-10",
+			"lastLogin": "2024-01-19T20:15:00Z",
+			"isActive": true
+		}
+	],
+	"testBookings": [
+		{
+			"id": 1,
+			"userId": 1,
+			"gameId": 1,
+			"gameTitle": "Spider-Man 2",
+			"bookingDate": "2024-01-18T14:30:00Z",
+			"status": "confirmed",
+			"price": 4999,
+			"currency": "₹",
+			"platform": "PS5",
+			"variant": "Standard Edition"
+		},
+		{
+			"id": 2,
+			"userId": 1,
+			"gameId": 5,
+			"gameTitle": "God of War Ragnarök",
+			"bookingDate": "2024-01-17T16:45:00Z",
+			"status": "pending",
+			"price": 3999,
+			"currency": "₹",
+			"platform": "PS5",
+			"variant": "Deluxe Edition"
+		},
+		{
+			"id": 3,
+			"userId": 3,
+			"gameId": 3,
+			"gameTitle": "Horizon Forbidden West",
+			"bookingDate": "2024-01-16T12:20:00Z",
+			"status": "confirmed",
+			"price": 2999,
+			"currency": "₹",
+			"platform": "PS5",
+			"variant": "Complete Edition"
+		}
+	],
+	"testFriends": [
+		{
+			"userId": 1,
+			"friends": [
+				{
+					"friendId": 3,
+					"friendLogin": "gamer123",
+					"friendName": "Игорь Геймеров",
+					"avatar": "https://via.placeholder.com/150x150/27AE60/FFFFFF?text=ИГ",
+					"status": "online",
+					"addedDate": "2024-01-12"
+				}
+			]
+		},
+		{
+			"userId": 3,
+			"friends": [
+				{
+					"friendId": 1,
+					"friendLogin": "testuser",
+					"friendName": "Тест Пользователь",
+					"avatar": "https://via.placeholder.com/150x150/4A90E2/FFFFFF?text=ТП",
+					"status": "offline",
+					"addedDate": "2024-01-12"
+				}
+			]
+		}
+	],
+	"testGameReviews": [
+		{
+			"id": 1,
+			"userId": 1,
+			"gameId": 1,
+			"rating": 5,
+			"review": "Отличная игра! Графика потрясающая, геймплей захватывающий.",
+			"reviewDate": "2024-01-19T10:00:00Z"
+		},
+		{
+			"id": 2,
+			"userId": 3,
+			"gameId": 3,
+			"rating": 4,
+			"review": "Очень красивая игра, но местами затянута.",
+			"reviewDate": "2024-01-17T15:30:00Z"
+		}
+	],
+	"loginInstructions": {
+		"ru": {
+			"title": "Тестовые данные для входа",
+			"users": [
+				{
+					"role": "Обычный пользователь",
+					"login": "testuser",
+					"password": "password123"
+				},
+				{
+					"role": "Администратор",
+					"login": "admin",
+					"password": "admin123"
+				},
+				{
+					"role": "Геймер",
+					"login": "gamer123",
+					"password": "gamer456"
+				}
+			]
+		},
+		"en": {
+			"title": "Test login data",
+			"users": [
+				{
+					"role": "Regular user",
+					"login": "testuser",
+					"password": "password123"
+				},
+				{
+					"role": "Administrator",
+					"login": "admin",
+					"password": "admin123"
+				},
+				{
+					"role": "Gamer",
+					"login": "gamer123",
+					"password": "gamer456"
+				}
+			]
+		}
+	}
+}

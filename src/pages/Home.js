@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button, H2, SearchGames, Breadcrumbs } from '../components';
+import { Button, H2, SearchGames } from '../components';
 import { fetchGames, fetchDiscountedGames } from '../operation/gameThunks';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
@@ -18,7 +18,7 @@ const HomeContainer = ({ className }) => {
 		dispatch(fetchDiscountedGames(0, 20));
 	}, [dispatch]);
 
-	const { games, loading, error, searchResults } = useSelector((state) => state.games);
+	const { games, loading, error } = useSelector((state) => state.games);
 	const { discountedGames } = useSelector((state) => state.games);
 
 	if (loading) return <p>Загружаем игры...</p>;
@@ -50,7 +50,6 @@ const HomeContainer = ({ className }) => {
 
 	return (
 		<div className={className}>
-			<Breadcrumbs />
 			<SearchGames />
 
 			{userId && filteredGames.length > 0 && (
@@ -59,7 +58,7 @@ const HomeContainer = ({ className }) => {
 					<div className="games-grid">
 						{filteredGames.map((game) => {
 							return (
-								<GameItem key={game.id} data-reservat={game.reservation}>
+								<GameItem key={game.id} data-reservat={game.reservation} onClick={() => navigate(`/game/${game.id}`)}>
 									<h3>{game.title}</h3>
 									<img src={game.image} alt={game.title} />
 									<div className="price-info">
@@ -99,9 +98,8 @@ const HomeContainer = ({ className }) => {
 											Скидка до: {formatDate(game.discountEndDate)}
 										</div>
 									)}
-									<Button onClick={() => navigate(`/game/${game.id}`)}>
-										Подробнее
-									</Button>
+
+										
 								</GameItem>
 							);
 						})}
@@ -122,14 +120,6 @@ const HomeContainer = ({ className }) => {
 				>
 					Со скидками
 				</button>
-				{searchResults.length > 0 && (
-					<button
-						className={activeTab === 'search' ? 'active' : ''}
-						onClick={() => setActiveTab('search')}
-					>
-						Результаты поиска ({searchResults.length})
-					</button>
-				)}
 			</div>
 
 			{activeTab === 'all' && (
@@ -142,6 +132,7 @@ const HomeContainer = ({ className }) => {
 									<GameItem
 										key={game.id}
 										data-reservat={game.reservation}
+										onClick={() => navigate(`/game/${game.id}`)}
 									>
 										<h3>{game.title}</h3>
 										<img src={game.image} alt={game.title} />
@@ -187,22 +178,7 @@ const HomeContainer = ({ className }) => {
 												{formatDate(game.discountEndDate)}
 											</div>
 										)}
-										{userId ? (
-											<Button
-												onClick={() =>
-													navigate(`/game/${game.id}`)
-												}
-											>
-												Забронировать
-											</Button>
-										) : (
-											<Button
-												onClick={() => navigate('/authorization')}
-												className="auth-button"
-											>
-												Авторизоваться
-											</Button>
-										)}
+
 									</GameItem>
 								);
 							}
@@ -222,6 +198,7 @@ const HomeContainer = ({ className }) => {
 									<GameItem
 										key={game.id}
 										data-reservat={game.reservation}
+										onClick={() => navigate(`/game/${game.id}`)}
 									>
 										<h3>{game.title}</h3>
 										<img src={game.image} alt={game.title} />
@@ -267,22 +244,7 @@ const HomeContainer = ({ className }) => {
 												{formatDate(game.discountEndDate)}
 											</div>
 										)}
-										{userId ? (
-											<Button
-												onClick={() =>
-													navigate(`/game/${game.id}`)
-												}
-											>
-												Забронировать
-											</Button>
-										) : (
-											<Button
-												onClick={() => navigate('/authorization')}
-												className="auth-button"
-											>
-												Авторизоваться
-											</Button>
-										)}
+
 									</GameItem>
 								);
 							}
@@ -292,85 +254,7 @@ const HomeContainer = ({ className }) => {
 				</>
 			)}
 
-			{activeTab === 'search' && searchResults.length > 0 && (
-				<>
-					<H2>Результаты поиска</H2>
-					<div className="games-grid">
-						{searchResults.map((game) => {
-							if (game.reservation === null) {
-								return (
-									<GameItem
-										key={game.id}
-										data-reservat={game.reservation}
-									>
-										<h3>{game.title}</h3>
-										<img src={game.image} alt={game.title} />
-										<div className="price-info">
-											<span className="current-price">
-												{game.currentPrice} {game.currency}
-											</span>
-											{game.discount > 0 && (
-												<span className="discount-badge">
-													-{game.discount}%
-												</span>
-											)}
-										</div>
-										{game.originalPrice > game.currentPrice && (
-											<div className="original-price">
-												{game.originalPrice} {game.currency}
-											</div>
-										)}
-										<div className="game-details">
-											<span className="platform">
-												{game.platform}
-											</span>
-											{game.rating && (
-												<span className="rating">
-													★ {game.rating}
-												</span>
-											)}
-										</div>
-										<div className="price-history">
-											Базовая цена: {getBasePrice(game)}{' '}
-											{game.currency}
-											{getMaxDiscount(game) > 0 && (
-												<span>
-													{' '}
-													• Макс. скидка: {getMaxDiscount(game)}
-													%
-												</span>
-											)}
-										</div>
-										{game.discountEndDate && (
-											<div className="discount-info">
-												Скидка до:{' '}
-												{formatDate(game.discountEndDate)}
-											</div>
-										)}
-										{userId ? (
-											<Button
-												onClick={() =>
-													navigate(`/game/${game.id}`)
-												}
-											>
-												Забронировать
-											</Button>
-										) : (
-											<Button
-												onClick={() => navigate('/authorization')}
-												className="auth-button"
-											>
-												Авторизоваться
-											</Button>
-										)}
-									</GameItem>
-								);
-							}
-							return null;
-						})}
-					</div>
-				</>
-			)}
+
 		</div>
 	);
 };

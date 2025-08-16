@@ -6,7 +6,7 @@ import { Input } from '../components';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '../components';
 import { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Registrate } from '../operation/registrate';
 import { setUser } from '../actions/user';
@@ -55,14 +55,17 @@ const RegistrationContainer = ({ className }) => {
 
 	const dispatch = useDispatch();
 	const roleId = useSelector(selectUserRole);
+	const navigate = useNavigate();
 	const onSubmit = ({ login, password }) => {
 		Registrate(login, password).then(({ error, res }) => {
 			if (error) {
 				setServerError(`Ошибка запроса ${error}`);
 				return;
 			}
+			// Обновляем данные пользователя в Redux
 			dispatch(setUser(res));
-			window.location.href = '/authorization';
+			// Перенаправляем на главную страницу
+			navigate('/');
 		});
 	};
 	if (roleId !== ROLE.READER) {

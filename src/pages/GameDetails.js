@@ -2,9 +2,31 @@ import styled from 'styled-components';
 import { Button, H2 } from '../components';
 import { getGame } from '../operation/gameThunks';
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { selectUserId } from '../selectors';
+import { Line } from 'react-chartjs-2';
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Title,
+	Tooltip,
+	Legend,
+} from 'chart.js';
+
+// Регистрируем компоненты Chart.js
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Title,
+	Tooltip,
+	Legend
+);
 
 const GameDetailsContainer = ({ className }) => {
 	const dispatch = useDispatch();
@@ -105,6 +127,89 @@ const GameDetailsContainer = ({ className }) => {
 						</div>
 					)}
 
+					{game.priceHistory && game.priceHistory.length > 0 && (
+						<div className="price-history-chart">
+							<h3>История цен</h3>
+							<div className="chart-container">
+								<Line
+									data={{
+										labels: game.priceHistory.map(item => {
+											const date = new Date(item.date);
+											return date.toLocaleDateString('ru-RU');
+										}),
+										datasets: [
+											{
+												label: 'Цена',
+												data: game.priceHistory.map(item => item.price),
+												borderColor: 'rgba(102, 126, 234, 1)',
+												backgroundColor: 'rgba(102, 126, 234, 0.2)',
+												borderWidth: 2,
+												tension: 0.4,
+												fill: true,
+												pointBackgroundColor: 'rgba(118, 75, 162, 1)',
+												pointBorderColor: '#fff',
+												pointHoverBackgroundColor: '#fff',
+												pointHoverBorderColor: 'rgba(118, 75, 162, 1)',
+												pointRadius: 5,
+												pointHoverRadius: 7,
+											},
+										],
+									}}
+									options={{
+										responsive: true,
+										maintainAspectRatio: false,
+										plugins: {
+											legend: {
+												position: 'top',
+												labels: {
+													font: {
+														size: 14,
+													},
+													color: 'rgba(255, 255, 255, 0.8)',
+												},
+											},
+											tooltip: {
+												backgroundColor: 'rgba(0, 0, 0, 0.7)',
+												titleFont: {
+													size: 14,
+												},
+												bodyFont: {
+													size: 14,
+												},
+												callbacks: {
+													label: function(context) {
+														return `Цена: ${context.raw} ${game.currency}`;
+													},
+												},
+											},
+										},
+										scales: {
+											x: {
+												grid: {
+													color: 'rgba(255, 255, 255, 0.1)',
+												},
+												ticks: {
+													color: 'rgba(255, 255, 255, 0.7)',
+												},
+											},
+											y: {
+												grid: {
+													color: 'rgba(255, 255, 255, 0.1)',
+												},
+												ticks: {
+													color: 'rgba(255, 255, 255, 0.7)',
+													callback: function(value) {
+														return value + ' ' + game.currency;
+													},
+												},
+											},
+										},
+									}}
+								/>
+							</div>
+						</div>
+					)}
+
 					{game.screenshots && game.screenshots.length > 0 && (
 						<div className="screenshots">
 							<h3>Скриншоты</h3>
@@ -125,9 +230,13 @@ const GameDetailsContainer = ({ className }) => {
 							<Button onClick={() => navigate('/')} className="reserved">
 								Забронировано
 							</Button>
-						) : (
+						) : userId ? (
 							<Button onClick={() => navigate('/')}>
 								Забронировать игру
+							</Button>
+						) : (
+							<Button onClick={() => navigate('/authorization')} className="auth-button">
+								Авторизоваться для бронирования
 							</Button>
 						)}
 						<Button onClick={() => navigate('/')} className="secondary">
@@ -297,6 +406,37 @@ export const GameDetails = styled(GameDetailsContainer)`
 				display: grid;
 				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 				gap: 20px;
+			}
+		}
+
+		.price-history-chart {
+			margin-bottom: 40px;
+
+			h3 {
+				margin-bottom: 20px;
+				color: #ffffff;
+				font-size: 1.5rem;
+				font-weight: 700;
+				background: linear-gradient(45deg, #667eea, #764ba2);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+
+			.chart-container {
+				background: rgba(0, 0, 0, 0.2);
+				border-radius: 15px;
+				padding: 20px;
+				height: 300px;
+				box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				overflow: hidden;
+				transition: all 0.3s ease;
+
+				&:hover {
+					box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+					transform: translateY(-5px);
+				}
 
 				img {
 					width: 100%;
